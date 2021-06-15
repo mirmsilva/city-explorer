@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React from 'react';
-import { Container, Form, Button} from 'react-bootstrap';
+import { Card, Container, Form, Button, CardColumns} from 'react-bootstrap';
 // import axios from 'axios';
 
 
@@ -11,7 +11,9 @@ class CityForm extends React.Component{
       city: '',
       cityLat:'',
       cityLon:'',
-      displayName: ''
+      displayName: '',
+      cityMap:'', 
+      errorCode:''
     };
   }
   
@@ -22,12 +24,13 @@ class CityForm extends React.Component{
   handleSubmit = async (e) =>{
     e.preventDefault();
 
+    try{
     const key = process.env.REACT_APP_LOCATION_IQ;
 
     let URL = `https://us1.locationiq.com/v1/search.php?key=${key}&q=${this.state.city}&format=json`;
 
     const response = await axios.get(URL);
-
+    
     const cityInfo = response.data[0];
     console.log(cityInfo);
 
@@ -37,8 +40,22 @@ class CityForm extends React.Component{
     
     this.setState({displayName, cityLat, cityLon});
 
-    console.log(cityInfo);
+    this.showMap();
+    }
+    catch(err){
+      console.log('err.message');
+      this.setState({errorCode: err.message})
+    }
   }
+
+  showMap = async (e) =>{
+    const key = process.env.REACT_APP_LOCATION_IQ;
+
+    let URL = `https://maps.locationiq.com/v3/staticmap?key=${key}&center=${this.state.cityLat},${this.state.cityLon}&zoom=18`;
+
+    this.setState({cityMap:URL})
+  }
+
   render(){
     return(
       <>
@@ -49,13 +66,26 @@ class CityForm extends React.Component{
             <Form.Control type = "text" placeholder = "city name" onChange = {this.handleChange}/> 
           </Form.Group>
           <Button variant = "primary" type = "submit">
-            Submit
+            Explore!
           </Button> 
         </Form>
-        <h3>{this.state.displayName}</h3>
-        <h3>Latitude: {this.state.cityLat}</h3>
-        <h3>Longitude: {this.state.cityLon}</h3>
-      </Container>
+        </Container>
+        {this.state.errorCode.length>0?
+        <Container>
+          <p>{this.state.errorCode}</p>
+        </Container>
+        :
+        <Card>
+          <ul>
+            <li>City Name: {this.state.displayName}</li>
+            <li>Latitude: {this.state.cityLat}</li>
+            <li>Longitude: {this.state.cityLon}</li>
+          </ul>
+        </Card>
+        }
+        <Card style={{width:'30rem'}}>
+          <Card.Img variant="top" src ={this.state.cityMap}/>
+        </Card>
       </>
     )
   }
