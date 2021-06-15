@@ -18,8 +18,9 @@
 01-01-2001 4:59pm - Application now has a fully-functional express server, with a GET route for the location resource. -->
 
 ## Credit and Collaborations
-<!-- Give credit (and a link) to other people or resources that helped you build this application. -->
+Qaalid Hashi
 
+## Lab 06
 Name of feature: ________________________________
 
 Estimate of time needed to complete: _____
@@ -29,3 +30,6 @@ Start time: _____
 Finish time: _____
 
 Actual time needed to complete: _____
+
+## Data Flow
+![dataflow](./images/dataFlow.png)
