@@ -13,7 +13,8 @@ class CityForm extends React.Component{
       cityLon:'',
       displayName: '',
       cityMap:'', 
-      errorCode:''
+      errorCode:'',
+      weatherInfo:[]
     };
   }
   
@@ -56,6 +57,14 @@ class CityForm extends React.Component{
     this.setState({cityMap:URL})
   }
 
+  showWeatherInfo = async (e) =>{
+    let weatherInfo = await axios.get(`http://localhost:3001/weather/lat${this.state.cityLat}&lon=${this.state.cityLon}`)
+
+    this.setState({
+      weatherInfo:weatherInfo.data
+    })
+  }
+
   render(){
     return(
       <>
@@ -86,6 +95,12 @@ class CityForm extends React.Component{
         <Card style={{width:'30rem'}}>
           <Card.Img variant="top" src ={this.state.cityMap}/>
         </Card>
+        <Container>
+          <h3>Weather Data Goes Here!</h3>
+          {this.weatherInfo.map((localWeather, i)=> <h3 key ={i}>
+            {localWeather.weather}
+          </h3>)}
+        </Container>
       </>
     )
   }
