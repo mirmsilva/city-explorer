@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React from 'react';
-import { Card, Container, Form, Button} from 'react-bootstrap';
+import { Card, Container, Form, Button, ListGroup} from 'react-bootstrap';
 // import axios from 'axios';
 
 
@@ -58,11 +58,11 @@ class CityForm extends React.Component{
   }
 
   showWeatherInfo = async (e) =>{
-    let weatherInfo = await axios.get(`http://localhost:3001/weather/lat${this.state.cityLat}&lon=${this.state.cityLon}`)
+    let weatherInfo = await axios.get(`http://localhost:3001/weather?lat=${this.state.cityLat}&lon=${this.state.cityLon}&searchQuery=${this.state.displayName.split(',')[0]}`);
 
     this.setState({
       weatherInfo:weatherInfo.data
-    })
+    });
   }
 
   render(){
@@ -95,12 +95,12 @@ class CityForm extends React.Component{
         <Card style={{width:'30rem'}}>
           <Card.Img variant="top" src ={this.state.cityMap}/>
         </Card>
-        <Container>
           <h3>Weather Data Goes Here!</h3>
-          {this.weatherInfo.map((localWeather, i)=> <h3 key ={i}>
-            {localWeather.weather}
-          </h3>)}
-        </Container>
+          {this.state.weatherInfo.map((weather,i) => 
+          <ListGroup.Item key ={i}>
+          <h3>{weather.date}</h3>
+          <p>{weather.description}</p>
+          </ListGroup.Item>)}
       </>
     )
   }
