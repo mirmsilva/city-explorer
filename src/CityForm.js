@@ -1,7 +1,9 @@
 import axios from 'axios';
 import React from 'react';
-import { Card, Container, Form, Button, ListGroup} from 'react-bootstrap';
-// import axios from 'axios';
+import { Card, Container, Form, Button } from 'react-bootstrap';
+
+import Weather from './Weather';
+import Movie from './Movie';
 
 
 class CityForm extends React.Component{
@@ -14,7 +16,8 @@ class CityForm extends React.Component{
       displayName: '',
       cityMap:'', 
       errorCode:'',
-      weatherInfo:[]
+      weatherInfo:{data:[]},
+      movieInfo:{data:[]}
     };
   }
   
@@ -41,6 +44,14 @@ class CityForm extends React.Component{
     
     this.setState({displayName, cityLat, cityLon});
 
+    //Get Weather Info
+    let weatherInfo = await axios.get(`http://localhost:3001/weather?lat=${this.state.cityLat}&lon=${this.state.cityLon}`);
+    this.setState({weatherInfo});
+
+    //Get Movie Info
+    let movieInfo = await axios.get(`http://localhost:3001/movie?city_name=${this.state.city}`)
+    this.setState({movieInfo});
+
     this.showMap();
     }
     catch(err){
@@ -49,21 +60,12 @@ class CityForm extends React.Component{
     }
   }
 
-  showMap = async (e) =>{
+  showMap = (e) =>{
     const key = process.env.REACT_APP_LOCATION_IQ;
-
     let URL = `https://maps.locationiq.com/v3/staticmap?key=${key}&center=${this.state.cityLat},${this.state.cityLon}&zoom=18`;
-
-    this.setState({cityMap:URL})
+    this.setState({cityMap:URL});
   }
 
-  showWeatherInfo = async (e) =>{
-    let weatherInfo = await axios.get(`http://localhost:3001/weather?lat=${this.state.cityLat}&lon=${this.state.cityLon}&searchQuery=${this.state.displayName.split(',')[0]}`);
-
-    this.setState({
-      weatherInfo:weatherInfo.data
-    });
-  }
 
   render(){
     return(
@@ -95,12 +97,12 @@ class CityForm extends React.Component{
         <Card style={{width:'30rem'}}>
           <Card.Img variant="top" src ={this.state.cityMap}/>
         </Card>
-          <h3>Weather Data Goes Here!</h3>
-          {this.state.weatherInfo.map((weather,i) => 
-          <ListGroup.Item key ={i}>
-          <h3>{weather.date}</h3>
-          <p>{weather.description}</p>
-          </ListGroup.Item>)}
+        <Weather
+        weatherData={this.state.weatherInfo.data}
+        />
+        <Movie 
+        movieData={this.state.movieInfo.data}
+        />
       </>
     )
   }
