@@ -1,10 +1,13 @@
 import axios from 'axios';
 import React from 'react';
-import { Card, Container, Form, Button } from 'react-bootstrap';
+import { Card, Form, Button, CardColumns } from 'react-bootstrap';
 
 import Weather from './Weather';
-import Movie from './Movie';
+import Movies from './Movies';
+import Map from './Map';
 
+//Global Keys
+const key = process.env.REACT_APP_LOCATION_IQ;
 
 class CityForm extends React.Component{
   constructor(props){
@@ -29,13 +32,9 @@ class CityForm extends React.Component{
     e.preventDefault();
 
     try{
-    const key = process.env.REACT_APP_LOCATION_IQ;
-
-    let URL = `https://us1.locationiq.com/v1/search.php?key=${key}&q=${this.state.city}&format=json`;
-
-    const response = await axios.get(URL);
+    let cityLatLon = await axios.get (`https://us1.locationiq.com/v1/search.php?key=${key}&q=${this.state.city}&format=json`);
     
-    const cityInfo = response.data[0];
+    const cityInfo = cityLatLon.data[0];
     console.log(cityInfo);
 
     let displayName = cityInfo.display_name;
@@ -43,6 +42,10 @@ class CityForm extends React.Component{
     let cityLon = cityInfo.lon;
     
     this.setState({displayName, cityLat, cityLon});
+    //Get City Map
+    let cityMap = (`https://maps.locationiq.com/v3/staticmap?key=${key}&center=${this.state.cityLat},${this.state.cityLon}&zoom=18`);
+
+    this.setState({cityMap});
 
     //Get Weather Info
     let weatherInfo = await axios.get(`http://localhost:3001/weather?lat=${this.state.cityLat}&lon=${this.state.cityLon}`);
@@ -52,25 +55,17 @@ class CityForm extends React.Component{
     let movieInfo = await axios.get(`http://localhost:3001/movie?city_name=${this.state.city}`)
     this.setState({movieInfo});
 
-    this.showMap();
-    }
-    catch(err){
+    }catch(err){
       console.log('err.message');
       this.setState({errorCode: err.message})
     }
-  }
-
-  showMap = (e) =>{
-    const key = process.env.REACT_APP_LOCATION_IQ;
-    let URL = `https://maps.locationiq.com/v3/staticmap?key=${key}&center=${this.state.cityLat},${this.state.cityLon}&zoom=18`;
-    this.setState({cityMap:URL});
   }
 
 
   render(){
     return(
       <>
-      <Container>
+      <Card sytle={{width:'18rem'}}>
         <Form onSubmit = {this.handleSubmit}>
           <Form.Group controlId = "cityForm">
             <Form.Label>Enter City Name Below:</Form.Label>
@@ -80,13 +75,13 @@ class CityForm extends React.Component{
             Explore!
           </Button> 
         </Form>
-        </Container>
+        </Card>
         {this.state.errorCode.length>0?
-        <Container>
+          <Card sytle={{width:'18rem'}}>
           <p>{this.state.errorCode}</p>
-        </Container>
+        </Card>
         :
-        <Card>
+        <Card sytle={{width:'18rem'}}>
           <ul>
             <li>City Name: {this.state.displayName}</li>
             <li>Latitude: {this.state.cityLat}</li>
@@ -94,15 +89,11 @@ class CityForm extends React.Component{
           </ul>
         </Card>
         }
-        <Card style={{width:'30rem'}}>
-          <Card.Img variant="top" src ={this.state.cityMap}/>
-        </Card>
-        <Weather
-        weatherData={this.state.weatherInfo.data}
-        />
-        <Movie 
-        movieData={this.state.movieInfo.data}
-        />
+        <CardColumns>
+        <Map showMap = {this.state.cityMap} />
+        <Weather weatherData={this.state.weatherInfo.data} />
+        <Movies movieData={this.state.movieInfo.data} />
+        </CardColumns>
       </>
     )
   }

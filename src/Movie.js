@@ -1,13 +1,13 @@
 import React from 'react';
-import { Container } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 
 class Movie extends React.Component{
 
   render(){
     return(
       <>
-      <Container>
-      <h2>This is where my movie info goes!</h2>
+      <Card style ={{width:'18rem'}}>
+      <h2>This is where my movie cards go</h2>
       {this.props.movieData.map((m,idx)=>{
         return(
           <ul>
@@ -17,7 +17,7 @@ class Movie extends React.Component{
             <li>vote count:{m.vote_count}</li>
           </ul>)
       })}
-      </Container>
+      </Card>
       </>
     )
   }
