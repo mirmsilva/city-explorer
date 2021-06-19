@@ -6,6 +6,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-image: url("./olivia-bliss-HTnycx0h_kk-unsplash.jpg");
+  background-repeat: no-repeat;
   background-color: lightgrey;
 }
 

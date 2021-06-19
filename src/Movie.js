@@ -6,18 +6,14 @@ class Movie extends React.Component{
   render(){
     return(
       <>
-      <Card style ={{width:'18rem'}}>
-      <h2>This is where my movie cards go</h2>
-      {this.props.movieData.map((m,idx)=>{
+      {this.props.movieData.splice(0,3).map((m,idx)=>{
         return(
-          <ul>
-            <li>{m.title}</li>
-            <li>overview:{m.overview}</li>
-            <li>vote avg:{m.vote_average}</li>
-            <li>vote count:{m.vote_count}</li>
-          </ul>)
+          <Card style ={{width:'18rem'}}>
+            <Card.Title>{m.title}</Card.Title>
+            <Card.Text>Received: {m.vote_count} votes</Card.Text>
+            <Card.Text>{m.overview}</Card.Text>
+          </Card>)
       })}
-      </Card>
       </>
     )
   }

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React from 'react';
-import { Card, Form, Button, CardColumns } from 'react-bootstrap';
+import { Card, Form, Button, Container, Row , Col} from 'react-bootstrap';
 
 import Weather from './Weather';
 import Movies from './Movies';
@@ -42,9 +42,9 @@ class CityForm extends React.Component{
     let cityLon = cityInfo.lon;
     
     this.setState({displayName, cityLat, cityLon});
+
     //Get City Map
     let cityMap = (`https://maps.locationiq.com/v3/staticmap?key=${key}&center=${this.state.cityLat},${this.state.cityLon}&zoom=18`);
-
     this.setState({cityMap});
 
     //Get Weather Info
@@ -55,12 +55,12 @@ class CityForm extends React.Component{
     let movieInfo = await axios.get(`http://localhost:3001/movie?city_name=${this.state.city}`)
     this.setState({movieInfo});
 
+    //Display error message
     }catch(err){
       console.log('err.message');
       this.setState({errorCode: err.message})
     }
   }
-
 
   render(){
     return(
@@ -89,11 +89,15 @@ class CityForm extends React.Component{
           </ul>
         </Card>
         }
-        <CardColumns>
-        <Map showMap = {this.state.cityMap} />
-        <Weather weatherData={this.state.weatherInfo.data} />
-        <Movies movieData={this.state.movieInfo.data} />
-        </CardColumns>
+        <Container>
+          <Row> 
+            <Col><Map showMap = {this.state.cityMap} /></Col>
+            <Col><Weather weatherData={this.state.weatherInfo.data} /></Col>
+          </Row>
+          <Row>
+            <Movies movieData={this.state.movieInfo.data} />
+          </Row>
+        </Container>
       </>
     )
   }

@@ -7,8 +7,7 @@ class WeatherDay extends React.Component{
     return(
       <>
       <Card style ={{width:'18rem'}}>
-      <h2>This Is The Forecast For One Day!</h2>
-        {this.props.weatherData.map((w,idx)=>{
+        {this.props.weatherData.splice(0,1).map((w,idx)=>{
           return(
           <ul>
             <li>Date: {w.date}</li>
