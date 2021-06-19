@@ -44,4 +44,4 @@ Actual time needed to complete: _____
 
 ## Data Flow
 ![dataflow-lab05](./images/dataFlow.png)
-![dataflow-lab06](./images/dataFlow-lab06.png)
+![dataflow-lab06](./images/dataFlow-lab07.png)
