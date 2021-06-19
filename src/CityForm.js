@@ -48,11 +48,11 @@ class CityForm extends React.Component{
     this.setState({cityMap});
 
     //Get Weather Info
-    let weatherInfo = await axios.get(`http://localhost:3001/weather?lat=${this.state.cityLat}&lon=${this.state.cityLon}`);
+    let weatherInfo = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/weather?lat=${this.state.cityLat}&lon=${this.state.cityLon}`);
     this.setState({weatherInfo});
 
     //Get Movie Info
-    let movieInfo = await axios.get(`http://localhost:3001/movie?city_name=${this.state.city}`)
+    let movieInfo = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/movie?city_name=${this.state.city}`)
     this.setState({movieInfo});
 
     //Display error message
