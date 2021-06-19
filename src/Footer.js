@@ -5,7 +5,7 @@ class Footer extends React.Component{
   render(){
     return(
       <>
-        <h2>This is my Footer!</h2>
+        <h2>Thanks for visiting my site!</h2>
       </>
     )
   }

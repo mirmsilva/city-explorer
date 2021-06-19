@@ -10,8 +10,8 @@ class WeatherDay extends React.Component{
         {this.props.weatherData.splice(0,1).map((w,idx)=>{
           return(
           <ul>
-            <li>Date: {w.date}</li>
-            <li>{w.description} with a low of: {w.lowTemp} Degrees & a high of {w.highTemp}</li>
+            <li>Date: {w.time}</li>
+            <li>Forecast: {w.forecast}</li>
           </ul>)
         })}
         </Card>
